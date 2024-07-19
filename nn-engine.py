@@ -23,7 +23,6 @@ batch_size = 70
 
 class tensorData(Dataset):
     def __init__(self, X: np.ndarray, y: np.ndarray) -> None:
-      # need to convert float64 to float32
 
       self.X = torch.from_numpy(X.astype(np.float32))
       self.y = torch.from_numpy(y.astype(np.float32))
@@ -69,7 +68,6 @@ model=neuralNet(X_train.shape[1],60,2)
 print(model)
 
 criterion = nn.MSELoss()
-# Construct the optimizer (Stochastic Gradient Descent in this case)
 optimizer = torch.optim.SGD(model.parameters(), lr = 0.01)
 
 # start training
@@ -84,7 +82,7 @@ for epoch in range(epochs):
         target = target.unsqueeze(1)
     loss = criterion(outputs, target)
 
-    # to remove previous epoch gradients
+    # to remove previous epoch gradients, so nxt rum will be perfect
     optimizer.zero_grad()
 
     # backward propagation
@@ -101,12 +99,10 @@ for epoch in range(epochs):
 with torch.no_grad():
   loss = 0
   for i, (inputs, target) in enumerate(dataLoaderTest):
-    # calculate output by running through the network
     predictions = model(inputs)
     print(predictions)
     print(target)
     if len(target.shape) == 1:
       target = target.unsqueeze(1)
-    # calculate loss for the predicted output
     loss += criterion(predictions, target)
   print(loss)
